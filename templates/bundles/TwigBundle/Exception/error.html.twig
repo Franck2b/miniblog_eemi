@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur - {{ status_code|default('Erreur') }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .error-page {
+            min-height: calc(100vh - 300px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0;
+        }
+        
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 900;
+            color: #7C3AED;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+        
+        .error-message {
+            font-size: 1.125rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-error {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        
+        .btn-error-primary {
+            background-color: var(--primary-purple);
+            color: white;
+        }
+        
+        .btn-error-primary:hover {
+            background-color: #6D28D9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="error-page">
+        <div class="container">
+            <div class="error-container">
+                <div class="error-icon">🚧</div>
+                <div class="error-code">{{ status_code|default('Erreur') }}</div>
+                <h1 class="error-title">{{ status_text|default('Une erreur est survenue') }}</h1>
+                <p class="error-message">
+                    Désolé, quelque chose s'est mal passé. Veuillez réessayer plus tard ou retourner à la page d'accueil.
+                </p>
+                
+                <div class="error-actions">
+                    <a href="{{ path('app_home') }}" class="btn-error btn-error-primary">
+                        🏠 Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

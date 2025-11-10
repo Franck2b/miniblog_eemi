@@ -1,0 +1,457 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}The Latest News and Reviews on Cars{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Hero Section */
+        .hero {
+            background: #FFFFFF;
+            padding: 5rem 0 4rem;
+            text-align: center;
+        }
+        
+        .hero-subtitle-small {
+            color: #7C3AED;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            line-height: 1.15;
+            color: #1F2937;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.125rem;
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            color: #6B7280;
+            line-height: 1.65;
+            font-weight: 400;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .email-form {
+            display: flex;
+            gap: 0;
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .email-input {
+            padding: 0.875rem 1.25rem;
+            border: none;
+            outline: none;
+            font-size: 0.9375rem;
+            min-width: 280px;
+            font-family: 'Inter', sans-serif;
+            color: #6B7280;
+        }
+        
+        .email-input::placeholder {
+            color: #9CA3AF;
+        }
+        
+        .btn-subscribe {
+            background-color: #7C3AED;
+            color: white;
+            padding: 0.875rem 1.75rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.9375rem;
+        }
+        
+        .btn-subscribe:hover {
+            background-color: #6D28D9;
+        }
+        
+        .privacy-text {
+            font-size: 0.8125rem;
+            color: #9CA3AF;
+            margin-top: 0.75rem;
+        }
+        
+        .privacy-text a {
+            color: #7C3AED;
+            text-decoration: underline;
+        }
+        
+        /* Section Titles */
+        .section {
+            padding: 4.5rem 0;
+            background: #FFFFFF;
+        }
+        
+        .section.recent-posts {
+            padding-bottom: 2rem;
+        }
+        
+        .section.all-posts {
+            padding-top: 2rem;
+        }
+        
+        .section.white-bg {
+            background: #FFFFFF;
+        }
+        
+        .section-header {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: #1F2937;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Recent Blog Posts */
+        .blog-grid-recent {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 2rem;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 1px solid #F3F4F6;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .blog-card-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%);
+        }
+        
+        .blog-card-content {
+            padding: 1.5rem;
+        }
+        
+        .blog-card-meta {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.875rem;
+            font-size: 0.875rem;
+            align-items: center;
+        }
+        
+        .blog-card-author {
+            color: #6B7280;
+            font-weight: 500;
+        }
+        
+        .blog-card-date {
+            color: #9CA3AF;
+            font-weight: 400;
+        }
+        
+        .blog-card-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #1F2937;
+            line-height: 1.35;
+            letter-spacing: -0.01em;
+        }
+        
+        .blog-card-excerpt {
+            color: #6B7280;
+            line-height: 1.625;
+            margin-bottom: 1.25rem;
+            font-size: 0.9375rem;
+        }
+        
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .blog-card-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        
+        .category-luxury { background-color: #FFFFFF; color: #D97706; border: 1px solid #E5E7EB; }
+        .category-sports { background-color: #FFFFFF; color: #2563EB; border: 1px solid #E5E7EB; }
+        .category-affordable { background-color: #FFFFFF; color: #059669; border: 1px solid #E5E7EB; }
+        .category-engine { background-color: #FFFFFF; color: #DC2626; border: 1px solid #E5E7EB; }
+        .category-presentation { background-color: #FFFFFF; color: #7C3AED; border: 1px solid #E5E7EB; }
+        .category-research { background-color: #FFFFFF; color: #DB2777; border: 1px solid #E5E7EB; }
+        .category-classic { background-color: #FFFFFF; color: #EA580C; border: 1px solid #E5E7EB; }
+        .category-experts { background-color: #FFFFFF; color: #6366F1; border: 1px solid #E5E7EB; }
+        .category-assurance { background-color: #FFFFFF; color: #3B82F6; border: 1px solid #E5E7EB; }
+        .category-customer { background-color: #FFFFFF; color: #10B981; border: 1px solid #E5E7EB; }
+        
+        .blog-card-arrow {
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+            color: #7C3AED;
+        }
+        
+        .blog-card:hover .blog-card-arrow {
+            transform: translateX(4px);
+        }
+        
+        /* All Blog Posts Section */
+        .blog-grid-all {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            row-gap: 2.5rem;
+        }
+        
+        .blog-card-small {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border: 1px solid #F3F4F6;
+        }
+        
+        .blog-card-small:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .blog-card-small .blog-card-image {
+            height: 200px;
+        }
+        
+        .blog-card-small .blog-card-content {
+            padding: 1.25rem;
+        }
+        
+        .blog-card-small .blog-card-title {
+            font-size: 1.125rem;
+            margin-bottom: 0.625rem;
+        }
+        
+        .blog-card-small .blog-card-excerpt {
+            display: none;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.375rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .pagination a,
+        .pagination span {
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.9375rem;
+            min-width: 36px;
+            text-align: center;
+        }
+        
+        .pagination a {
+            background-color: white;
+            color: #6B7280;
+            border: 1px solid #E5E7EB;
+        }
+        
+        .pagination a:hover {
+            border-color: #7C3AED;
+            color: #7C3AED;
+            background-color: #FFFFFF;
+        }
+        
+        .pagination .active {
+            background-color: #7C3AED;
+            color: white;
+            border: 1px solid #7C3AED;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .blog-grid-all {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.625rem;
+            }
+            
+            .email-input {
+                min-width: 200px;
+            }
+            
+            .blog-grid-recent,
+            .blog-grid-all {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-subtitle-small">Our blog</div>
+            <h1 class="hero-title">The Latest News and Reviews on Cars</h1>
+            <p class="hero-subtitle">Subscribe to explore the latest cars on the market, from sporty coupes to eco-friendly hybrids and cutting-edge electric vehicles.</p>
+            
+            <div class="hero-cta">
+                <form class="email-form" action="#" method="post">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="btn-subscribe">Subscribe</button>
+                </form>
+            </div>
+            <div class="privacy-text">
+                We care about your data in our <a href="#">privacy policy</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Blog Posts -->
+    <section class="section recent-posts">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Recent blog posts</h2>
+            </div>
+            
+            <div class="blog-grid-recent">
+                {% for article in recentArticles %}
+                    <a href="{{ path('app_article_show', {slug: article.slug}) }}" class="blog-card">
+                        {% if article.image %}
+                            <img src="{{ article.image }}" alt="{{ article.title }}" class="blog-card-image">
+                        {% else %}
+                            <div class="blog-card-image"></div>
+                        {% endif %}
+                        
+                        <div class="blog-card-content">
+                            <div class="blog-card-meta">
+                                <span class="blog-card-author">{{ article.author.fullName }}</span>
+                                <span class="blog-card-date">• {{ article.createdAt|date('d M Y') }}</span>
+                            </div>
+                            
+                            <h3 class="blog-card-title">{{ article.title }}</h3>
+                            
+                            <p class="blog-card-excerpt">{{ article.content|slice(0, 150) }}...</p>
+                            
+                            <div class="blog-card-footer">
+                                {% if article.category %}
+                                    <span class="blog-card-category category-{{ article.category|lower }}">{{ article.category }}</span>
+                                {% endif %}
+                                <span class="blog-card-arrow">→</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- All Blog Posts -->
+    <section class="section white-bg all-posts">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">All blog posts</h2>
+            </div>
+            
+            <div class="blog-grid-all">
+                {% for article in articles %}
+                    <a href="{{ path('app_article_show', {slug: article.slug}) }}" class="blog-card-small">
+                        {% if article.image %}
+                            <img src="{{ article.image }}" alt="{{ article.title }}" class="blog-card-image">
+                        {% else %}
+                            <div class="blog-card-image"></div>
+                        {% endif %}
+                        
+                        <div class="blog-card-content">
+                            <div class="blog-card-meta">
+                                <span class="blog-card-author">{{ article.author.fullName }}</span>
+                                <span class="blog-card-date">• {{ article.createdAt|date('d M Y') }}</span>
+                            </div>
+                            
+                            <h3 class="blog-card-title">{{ article.title }}</h3>
+                            
+                            <div class="blog-card-footer">
+                                {% if article.category %}
+                                    <span class="blog-card-category category-{{ article.category|lower }}">{{ article.category }}</span>
+                                {% endif %}
+                                <span class="blog-card-arrow">→</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if totalPages > 1 %}
+                <div class="pagination">
+                    {% if currentPage > 1 %}
+                        <a href="{{ path('app_home', {page: currentPage - 1}) }}">← Previous</a>
+                    {% endif %}
+                    
+                    {% for page in 1..totalPages %}
+                        {% if page == currentPage %}
+                            <span class="active">{{ page }}</span>
+                        {% else %}
+                            <a href="{{ path('app_home', {page: page}) }}">{{ page }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if currentPage < totalPages %}
+                        <a href="{{ path('app_home', {page: currentPage + 1}) }}">Next →</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+
