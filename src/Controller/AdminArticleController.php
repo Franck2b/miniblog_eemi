@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+
 #[Route('/admin/articles')]
 #[IsGranted('ROLE_USER')]
 class AdminArticleController extends AbstractController
